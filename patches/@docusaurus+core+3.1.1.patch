@@ -1,12 +1,10 @@
 diff --git a/node_modules/@docusaurus/core/lib/client/ClientLifecyclesDispatcher.js b/node_modules/@docusaurus/core/lib/client/ClientLifecyclesDispatcher.js
 index 903f8dc..cdc15f2 100644
---- a/node_modules/@docusaurus/core/lib/client/ClientLifecyclesDispatcher.js
 +++ b/node_modules/@docusaurus/core/lib/client/ClientLifecyclesDispatcher.js
 @@ -16,7 +16,20 @@ export function dispatchLifecycleAction(lifecycleAction, ...args) {
  }
  function scrollAfterNavigation({ location, previousLocation, }) {
      if (!previousLocation) {
--        return; // no-op: use native browser feature
 +      // if there is a hash and the element is not in view after some time, scroll to it
 +      const { hash } = location;
 +      if (!hash) {        
