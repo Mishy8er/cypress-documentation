@@ -6,11 +6,9 @@ index 53ecafa..dc8f0df 100644
              }
              else {
                  const headingTextNodes = headingNode.children.filter(({ type }) => !['html', 'jsx'].includes(type));
--                const heading = toString(headingTextNodes.length > 0 ? headingTextNodes : headingNode);
 +                let heading = toString(headingTextNodes.length > 0 ? headingTextNodes : headingNode);
                  // Support explicit heading IDs
                  const parsedHeading = (0, utils_1.parseMarkdownHeadingId)(heading);
--                id = parsedHeading.id ?? slugs.slug(heading);
 +                // if the heading is a semver version number, replace the dots with dashes
 +                heading = parseVersionHeading(heading);
 +                // remove any spaces that might be cause by things like having icons in the headings
@@ -23,7 +21,6 @@ index 53ecafa..dc8f0df 100644
                      const lastNode = headingNode.children[headingNode.children.length - 1];
                      if (headingNode.children.length > 1) {
                          const lastNodeText = (0, utils_1.parseMarkdownHeadingId)(lastNode.value).text;
--                        // When last part contains test+id, remove the id
 +                        // When last part contains testid, remove the id
                          if (lastNodeText) {
                              lastNode.value = lastNodeText;
@@ -32,8 +29,6 @@ index 53ecafa..dc8f0df 100644
                      }
                  }
              }
--            data.id = id;
--            properties.id = id;
 +            data.id = id.trim();
 +            properties.id = id.trim();
          });
